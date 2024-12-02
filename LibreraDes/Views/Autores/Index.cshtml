@@ -1,0 +1,103 @@
+﻿@model IEnumerable<LibreraDes.ViewModels.AutorViewModel>
+
+<div class="container autores-container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">Lista de Autores</h2>
+        <button class="btn btn-success" onclick="openCreateModal()">
+            <i class="fas fa-plus"></i> Crear Nuevo
+        </button>
+    </div>
+
+    <!-- Tabla de Autores -->
+    <table class="table table-bordered table-striped autores-table">
+        <thead class="table-primary">
+            <tr>
+                <th>Nombre</th>
+                <th>Fecha de Nacimiento</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var autor in Model)
+            {
+                <tr>
+                    <td>@autor.Nombre</td>
+                    <td>@autor.FechaNacimiento.ToString("dd/MM/yyyy")</td>
+                    <td class="text-center">
+                        <button onclick="openEditModal('@autor.Id', '@autor.Nombre', '@autor.FechaNacimiento')" class="btn btn-warning btn-sm me-2">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button onclick="confirmDelete('@autor.Id')" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal para Crear Autor -->
+<div id="createModal" class="modal fade" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="createModalLabel">Crear Autor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div id="createAlert" class="alert alert-danger d-none" role="alert">
+                    Todos los campos son obligatorios.
+                </div>
+                <form id="createForm">
+                    <div class="mb-3">
+                        <label for="createName" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="createName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="createDate" class="form-label">Fecha de Nacimiento:</label>
+                        <input type="date" class="form-control" id="createDate" required>
+                    </div>
+                    <button type="button" onclick="createAutor()" class="btn btn-primary w-100">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal para Editar Autor -->
+<div id="editModal" class="modal fade" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="editModalLabel">Editar Autor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div id="editAlert" class="alert alert-danger d-none" role="alert">
+                    Todos los campos son obligatorios.
+                </div>
+                <form id="editForm">
+                    <input type="hidden" id="editId">
+                    <div class="mb-3">
+                        <label for="editName" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="editName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDate" class="form-label">Fecha de Nacimiento:</label>
+                        <input type="date" class="form-control" id="editDate" required>
+                    </div>
+                    <button type="button" onclick="updateAutor()" class="btn btn-primary w-100">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4mmiLFUM4GFVZA7iQ7Zq3lQ76dyIl3lgz5m9OmE/kqFPF3J8mBLeD5Q" crossorigin="anonymous"></script>
+    <script src="~/js/Autores.js"></script>
+}
+<link rel="stylesheet" href="~/css/Autores.css" />

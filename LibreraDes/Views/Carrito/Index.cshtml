@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Estilos personalizados -->
+    <link href="~/css/estilos.css" rel="stylesheet" />
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Tu Carrito de Compras</h2>
+
+        <form asp-action="ProcesarCompra" method="post" id="form-carrito">
+            <div class="table-responsive shadow-sm p-4 rounded bg-white">
+                <table class="table table-hover text-center">
+                    <thead class="bg-dark text-light">
+                        <tr>
+                            <th>Seleccionar</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr class="align-middle">
+                                    <td><input type="checkbox" class="form-check-input producto-seleccionado" name="productosSeleccionados" value="@item.LibroId" /></td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="@item.URLImagenLibro" alt="@item.TituloLibro" class="img-thumbnail mr-2" style="width: 60px; height: 60px;" />
+                                            <span>@item.TituloLibro</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="cantidad" value="@item.Cantidad" min="1" class="form-control text-center cantidad-input" data-libroid="@item.LibroId" style="width: 80px;" />
+                                    </td>
+                                    <td>@item.PrecioLibro.ToString("C")</td>
+                                    <td class="subtotal">@item.Subtotal.ToString("C")</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm eliminar-producto" data-libroid="@item.LibroId" aria-label="Eliminar @item.TituloLibro">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    <strong>No hay productos en tu carrito.</strong>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <button type="button" id="realizar-pedido" class="btn btn-success btn-block">
+                        <i class="fas fa-shopping-cart"></i> Realizar Pedido
+                    </button>
+                </div>
+                <div class="col-md-6 text-right">
+                    <h4>Total: <span id="total">@ViewBag.TotalSeleccionado?.ToString("C") ?? "$0.00"</span></h4>
+                </div>
+            </div>
+        </form>
+
+        <div class="mt-4 text-center">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-secondary volver-productos">
+                <i class="fas fa-arrow-left"></i> Regresar a Productos
+            </a>
+        </div>
+    </div>
+
+    <!-- Mensajes de error/éxito -->
+    <div class="messages-container"></div>
+
+    <!-- JavaScript de Bootstrap y jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Función para mostrar un mensaje de error/éxito
+            function showMessage(type, message) {
+                let messageContainer = $('.messages-container');
+                messageContainer.empty();
+
+                let alertClass = type === 'error' ? 'alert-danger' : 'alert-success';
+                let messageElement = $('<div class="alert ' + alertClass + ' alert-dismissible fade show" role="alert">' + message + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+
+                messageContainer.append(messageElement);
+                messageElement.fadeIn();
+
+                setTimeout(function () {
+                    messageElement.fadeOut(function () {
+                        messageElement.remove();
+                    });
+                }, 3000);
+            }
+
+            function actualizarTotal() {
+                let total = 0;
+                $('.producto-seleccionado:checked').each(function () {
+                    let fila = $(this).closest('tr');
+                    let subtotal = parseFloat(fila.find('.subtotal').text().replace('$', '').replace(',', ''));
+                    total += subtotal;
+                });
+                $('#total').text('$' + total.toFixed(2));
+            }
+
+            function actualizarCarritoCount() {
+                $.getJSON('@Url.Action("ObtenerCantidadProductos", "Carrito")', function (data) {
+                    var count = data.cantidad;
+                    var carritoCountElem = $('#carrito-count');
+
+                    if (count > 0) {
+                        carritoCountElem.text(count);
+                        carritoCountElem.show();
+                    } else {
+                        carritoCountElem.hide();
+                    }
+                });
+            }
+
+            $('.cantidad-input').on('change', function () {
+                let libroId = $(this).data('libroid');
+                let cantidad = $(this).val();
+
+                if (cantidad < 1) {
+                    cantidad = 1;
+                    $(this).val(cantidad);
+                }
+
+                $.post('@Url.Action("ActualizarCantidad", "Carrito")', { libroId: libroId, cantidad: cantidad }, function (response) {
+                    if (response.success) {
+                        let fila = $('input[data-libroid="' + libroId + '"]').closest('tr');
+                        let precioUnitario = parseFloat(fila.find('td:eq(3)').text().replace('$', '').replace(',', ''));
+                        let nuevoSubtotal = precioUnitario * cantidad;
+                        fila.find('.subtotal').text('$' + nuevoSubtotal.toFixed(2));
+
+                        actualizarTotal();
+                        actualizarCarritoCount();
+                    } else {
+                        showMessage('error', 'Hubo un error al actualizar la cantidad.');
+                    }
+                });
+            });
+
+            $('.eliminar-producto').on('click', function () {
+                let libroId = $(this).data('libroid');
+
+                $.post('@Url.Action("EliminarDelCarrito", "Carrito")', { libroId: libroId }, function (response) {
+                    if (response.success) {
+                        $('button[data-libroid="' + libroId + '"]').closest('tr').remove();
+                        actualizarTotal();
+                        actualizarCarritoCount();
+                    } else {
+                        showMessage('error', 'Hubo un error al eliminar el producto.');
+                    }
+                });
+            });
+
+            $('.producto-seleccionado').on('change', function () {
+                actualizarTotal();
+            });
+
+            $('#realizar-pedido').on('click', function (e) {
+                e.preventDefault();
+
+                let seleccionados = $('.producto-seleccionado:checked');
+
+                if (seleccionados.length === 0) {
+                    showMessage('error', 'Selecciona al menos un producto para realizar la compra.');
+                } else {
+                    let productosSeleccionados = seleccionados.map(function () {
+                        return $(this).val();
+                    }).get();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("ProcesarCompra", "Carrito")',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(productosSeleccionados),
+                        success: function (response) {
+                            if (response.success) {
+                                showMessage('success', response.message || 'Compra realizada con éxito.');
+                                seleccionados.each(function () {
+                                    $(this).closest('tr').remove();
+                                });
+
+                                actualizarTotal();
+                                actualizarCarritoCount();
+                            } else {
+                                showMessage('error', response.message || 'Hubo un error al procesar la compra.');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            showMessage('error', 'Error de conexión: ' + error);
+                        }
+                    });
+                }
+            });
+
+            actualizarTotal();
+            actualizarCarritoCount();
+        });
+    </script>
+</body>
+</html>

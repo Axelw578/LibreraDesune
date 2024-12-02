@@ -1,0 +1,51 @@
+﻿@model IEnumerable<LibroViewModel>
+@using LibreraDes.ViewModels
+
+
+<div class="container mt-5">
+    <!-- Sección para mostrar todos los libros comprados -->
+    <div class="row">
+        @foreach (var libro in Model)
+        {
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="card product-card shadow-sm animate__animated animate__fadeIn">
+                    <div class="product-image">
+                        <img src="@libro.URLImagen" class="card-img-top img-fluid" alt="@libro.Titulo" />
+                    </div>
+                    <div class="card-body product-info">
+
+
+                        <!-- Botón de favorito -->
+                        <button class="btn btn-outline-danger btn-sm btn-favorite" data-libro-id="@libro.Id">
+                            <i class="bi bi-heart" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Scripts para manejar la animación y el botón de favorito -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Efecto de cambio de color del botón de favorito
+        $('.btn-favorite').click(function () {
+            $(this).find('i').toggleClass('bi-heart bi-heart-fill text-danger');
+        });
+
+        // Animación de entrada en los contenedores de cada libro
+        $('.product-card').hover(
+            function () {
+                $(this).addClass('animate__pulse');
+            },
+            function () {
+                $(this).removeClass('animate__pulse');
+            }
+        );
+    });
+</script>
+
+<!-- Enlace a Bootstrap Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">

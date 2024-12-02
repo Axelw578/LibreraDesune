@@ -1,0 +1,104 @@
+﻿.categorias-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+    .header-section h2 {
+        font-size: 1.8rem;
+        color: #333;
+        margin: 0;
+    }
+
+.btn-create {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+}
+
+    .btn-create:hover {
+        background-color: #218838;
+    }
+
+.icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+}
+
+.table.categorias-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.categorias-table th, .categorias-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.categorias-table th {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.categorias-table td {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px; /* Espacio entre los botones */
+}
+
+.btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    width: 90px; /* Define un ancho fijo para uniformidad */
+    height: 40px; /* Define una altura fija */
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.btn-edit {
+    background-color: #007bff;
+}
+
+    .btn-edit:hover {
+        background-color: #0069d9;
+    }
+
+.btn-delete {
+    background-color: #dc3545;
+}
+
+    .btn-delete:hover {
+        background-color: #c82333;
+    }

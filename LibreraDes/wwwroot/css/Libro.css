@@ -1,0 +1,63 @@
+﻿/* Libro.css */
+
+/* Estilos generales */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f0f4f8; /* Fondo claro */
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 900px; /* Ajustar el ancho del contenedor */
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Detalles del libro */
+.card {
+    border: none; /* Quitar bordes */
+    transition: transform 0.2s ease-in-out; /* Animación para contenedor */
+}
+
+    .card:hover {
+        transform: scale(1.05); /* Escalado al pasar el ratón */
+    }
+
+/* Información del libro */
+.card-body {
+    background-color: #ffffff; /* Fondo blanco */
+    border-radius: 0 0 12px 12px; /* Esquinas redondeadas */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+/* Títulos y texto */
+.card-title {
+    font-size: 1.2rem; /* Tamaño uniforme */
+    margin: 0;
+    color: #222; /* Color del texto */
+}
+
+.card-text {
+    font-size: 1rem; /* Tamaño uniforme */
+    color: #555; /* Color del texto */
+}
+
+/* Botones */
+.animated-button {
+    transition: background-color 0.3s, transform 0.3s; /* Animación de fondo y escalado */
+}
+
+    .animated-button:hover {
+        background-color: #0056b3; /* Color de fondo al pasar el ratón */
+        transform: scale(1.05); /* Escalado al pasar el ratón */
+    }
+
+/* Estilo para evitar que el texto exceda */
+.card-text {
+    overflow: hidden; /* Ocultar el desbordamiento */
+    text-overflow: ellipsis; /* Añadir puntos suspensivos */
+    white-space: nowrap; /* Mantener en una línea */
+    max-width: 100%; /* Asegurar que no exceda el contenedor */
+}

@@ -1,0 +1,137 @@
+﻿@model List<LibreraDes.ViewModels.LibroDetallesViewModel>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libros Disponibles</title>
+    <link rel="stylesheet" href="~/css/Home.css"> <!-- Ruta del archivo CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4 text-center">Libros Disponibles</h1>
+
+        <!-- Sección para mostrar los detalles del libro seleccionado -->
+        @if (ViewBag.LibroSeleccionado != null)
+        {
+            var libroSeleccionado = ViewBag.LibroSeleccionado;
+            <div id="detalleLibro" class="card mb-5 shadow-lg">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="@libroSeleccionado.URLImagen" class="card-img" alt="@libroSeleccionado.Titulo">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3 class="card-title font-weight-bold">@libroSeleccionado.Titulo</h3>
+                            <p class="card-text"><strong>Sinopsis:</strong> @libroSeleccionado.Sinopsis</p>
+                            <p class="card-text"><strong>Autor:</strong> @libroSeleccionado.AutorNombre</p>
+                            <p class="card-text"><strong>Fecha de Nacimiento del Autor:</strong> @libroSeleccionado.FechaNacimientoAutor.ToShortDateString()</p>
+                            <p class="card-text"><strong>Categoría:</strong> @libroSeleccionado.CategoriaNombre</p>
+                            <p class="card-text"><strong>Descripción de la Categoría:</strong> @libroSeleccionado.DescripcionCategoria</p>
+                            <p class="card-text"><strong>Precio:</strong> @libroSeleccionado.Precio.ToString("C")</p>
+                            @if (libroSeleccionado.CantidadDisponible > 0)
+                            {
+                                <p class="card-text text-success"><strong>Disponible:</strong> @libroSeleccionado.CantidadDisponible unidades</p>
+                                <!-- Formulario para agregar al carrito -->
+                                <form action="@Url.Action("AgregarAlCarrito", "Home")" method="post">
+                                    <input type="hidden" name="libroId" value="@libroSeleccionado.Id" />
+                                    <input type="number" name="cantidad" value="1" min="1" max="@libroSeleccionado.CantidadDisponible" class="form-control mb-2" required />
+                                    <button type="submit" class="btn btn-success btn-block">Agregar al carrito</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <p class="card-text text-danger">Sin existencias</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["Error"]
+            </div>
+        }
+
+        @if (TempData["Mensaje"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["Mensaje"]
+            </div>
+        }
+
+        <!-- Sección para mostrar todos los libros disponibles -->
+        <div class="row">
+            @foreach (var libro in Model)
+            {
+                <div class="col-md-4 col-lg-3 mb-4">
+                    <div class="card product-card shadow-sm">
+                        <div class="product-image">
+                            <img src="@libro.URLImagen" class="card-img-top img-fluid" alt="@libro.Titulo" />
+                        </div>
+                        <div class="card-body product-info">
+                            <h5 class="card-title font-weight-bold">@libro.Titulo</h5>
+                            <p class="card-text"><small class="text-muted">Autor: @libro.AutorNombre</small></p>
+                            <p class="card-text"><small class="text-muted">Categoría: @libro.CategoriaNombre</small></p>
+                            <p class="card-text"><strong>Precio:</strong> @libro.Precio.ToString("C")</p>
+
+                            @if (libro.CantidadDisponible > 0)
+                            {
+                                <p class="card-text text-success">Disponible: @libro.CantidadDisponible unidades</p>
+                                <form action="@Url.Action("AgregarAlCarrito", "Home")" method="post">
+                                    <input type="hidden" name="libroId" value="@libro.Id" />
+                                    <input type="number" name="cantidad" value="1" min="1" max="@libro.CantidadDisponible" class="form-control mb-2" required />
+                                    <button type="submit" class="btn btn-success btn-sm btn-block">Agregar al carrito</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <p class="card-text text-danger">Sin existencias</p>
+                            }
+
+                            <!-- Botón para ver los detalles del libro -->
+                            <a href="@Url.Action("Index", "Home", new { id = libro.Id })" class="btn btn-primary btn-sm btn-block animated-button">
+                                Ver Detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Lógica de JavaScript para animaciones -->
+    <script>
+        $(document).ready(function () {
+            // Mostrar detalles del libro seleccionado con animación suave
+            $('#detalleLibro').hide().slideDown(600);
+
+            // Cerrar el contenedor de detalles al hacer clic en él
+            $('#detalleLibro').click(function () {
+                $(this).slideUp(600);
+            });
+
+            // Efecto de clic en el botón "Ver Detalles"
+            $('.animated-button').on('click', function (event) {
+                event.preventDefault(); // Evita la navegación predeterminada
+                const url = $(this).attr('href');
+                $(this).addClass('btn-clicked');
+
+                // Redirige después de una breve animación
+                setTimeout(function () {
+                    window.location.href = url;
+                }, 300);
+            });
+        });
+    </script>
+
+    <!-- Archivos JS de Bootstrap -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+﻿@model List<LibreraDes.ViewModels.LibroViewModel>
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Libros</title>
+    <!-- Referencias a Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
+    <!-- Referencia al CSS personalizado -->
+    <link rel="stylesheet" href="~/css/Libro.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Lista de Libros</h1>
+
+        <!-- Botón para crear un nuevo libro -->
+        <div class="text-right mb-4">
+            <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#crearLibroModal">Crear Nuevo Libro</button>
+        </div>
+
+        <div class="row">
+            @foreach (var libro in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-5">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@libro.URLImagen" class="card-img-top img-fluid" alt="Portada del libro @libro.Titulo">
+                        <div class="card-body">
+                            <h5 class="card-title font-weight-bold text-primary">@libro.Titulo</h5>
+                            <p class="card-text"><strong>Precio:</strong> $@libro.Precio</p>
+                            <p class="card-text"><strong>Sinopsis:</strong> @libro.Sinopsis</p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editarLibroModal-@libro.Id">Editar</button>
+                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarLibroModal-@libro.Id">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de edición -->
+                <div class="modal fade" id="editarLibroModal-@libro.Id" tabindex="-1" aria-labelledby="editarLibroModalLabel-@libro.Id" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <form method="post" action="@Url.Action("Editar", "Libros", new { id = libro.Id })">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editarLibroModalLabel-@libro.Id">Editar Libro</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="editarMensaje-@libro.Id" class="alert d-none"></div>
+                                    <div class="form-group">
+                                        <label for="titulo">Título</label>
+                                        <input type="text" class="form-control" name="Titulo" value="@libro.Titulo" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="sinopsis">Sinopsis</label>
+                                        <textarea class="form-control" name="Sinopsis" rows="3" required>@libro.Sinopsis</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="precio">Precio</label>
+                                        <input type="number" class="form-control" name="Precio" value="@libro.Precio" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="urlImagen">URL de Imagen</label>
+                                        <input type="text" class="form-control" name="URLImagen" value="@libro.URLImagen" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="categoria">Categoría</label>
+                                        <select class="form-control" name="CategoriaId" id="categoriaEditar-@libro.Id" required></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="autor">Autor</label>
+                                        <select class="form-control" name="AutorId" id="autorEditar-@libro.Id" required></select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de eliminación -->
+                <div class="modal fade" id="eliminarLibroModal-@libro.Id" tabindex="-1" aria-labelledby="eliminarLibroModalLabel-@libro.Id" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="eliminarLibroModalLabel-@libro.Id">Eliminar Libro</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="eliminarMensaje-@libro.Id" class="alert d-none"></div>
+                                <p>¿Estás seguro de que deseas eliminar el libro "<strong>@libro.Titulo</strong>"? Esta acción no se puede deshacer.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <form method="post" action="@Url.Action("Eliminar", "Libros")" class="d-inline">
+                                    <input type="hidden" name="id" value="@libro.Id" />
+                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Modal para crear libro -->
+    <div class="modal fade" id="crearLibroModal" tabindex="-1" aria-labelledby="crearLibroModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form method="post" action="@Url.Action("Crear", "Libros")">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="crearLibroModalLabel">Crear Nuevo Libro</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="crearMensaje" class="alert d-none"></div>
+                        <div class="form-group">
+                            <label for="titulo">Título</label>
+                            <input type="text" class="form-control" name="Titulo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sinopsis">Sinopsis</label>
+                            <textarea class="form-control" name="Sinopsis" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="precio">Precio</label>
+                            <input type="number" class="form-control" name="Precio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="urlImagen">URL de Imagen</label>
+                            <input type="text" class="form-control" name="URLImagen" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="categoria">Categoría</label>
+                            <select class="form-control" name="CategoriaId" id="categoriaCrear" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="autor">Autor</label>
+                            <select class="form-control" name="AutorId" id="autorCrear" required></select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Crear Libro</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referencias a jQuery y Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <!-- Inclusión del archivo Libro.js -->
+    <script src="~/js/Libro.js"></script>
+</body>
+
+</html>

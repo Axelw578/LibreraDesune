@@ -1,0 +1,89 @@
+﻿@model LibreraDes.ViewModels.UsuarioRegistroViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="~/css/login.css" rel="stylesheet"> <!-- Usamos el mismo CSS que en el login para mantener el estilo -->
+</head>
+<body>
+
+    <div class="container login-container">
+        <!-- Usamos la misma clase login-container para coherencia -->
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card login-card">
+                    <!-- Usamos login-card también -->
+                    <div class="card-body">
+                        <h3 class="text-center mb-4">Registro de Usuario</h3>
+
+                        <!-- Mensajes de éxito o error desde el backend -->
+                        @if (TempData["RegistroExitoso"] != null)
+                        {
+                            <div class="alert alert-success text-center">
+                                @TempData["RegistroExitoso"]
+                            </div>
+                        }
+                        @if (TempData["ErrorRegistro"] != null)
+                        {
+                            <div class="alert alert-danger text-center">
+                                @TempData["ErrorRegistro"]
+                            </div>
+                        }
+
+                        <!-- Formulario de registro -->
+                        <form id="registroForm" method="post" action="/Registro/Registrar">
+                            <div class="form-group mt-2">
+                                <label for="nombreUsuario">Nombre de Usuario</label>
+                                <input type="text" id="nombreUsuario" name="NombreUsuario" class="form-control" placeholder="Nombre de usuario" value="@Model.NombreUsuario" required>
+                                <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="correo">Correo Electrónico</label>
+                                <input type="email" id="correo" name="Correo" class="form-control" placeholder="Correo electrónico" value="@Model.Correo" required>
+                                <span asp-validation-for="Correo" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="clave">Contraseña</label>
+                                <input type="password" id="clave" name="Clave" class="form-control" placeholder="Contraseña" required>
+                                <span asp-validation-for="Clave" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="confirmarClave">Confirmar Contraseña</label>
+                                <input type="password" id="confirmarClave" name="ConfirmarClave" class="form-control" placeholder="Confirmar contraseña" required>
+                                <span asp-validation-for="ConfirmarClave" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="urlFotoPerfil">URL de Foto de Perfil</label>
+                                <input type="url" id="urlFotoPerfil" name="URLFotoPerfil" class="form-control" placeholder="URL de la foto de perfil (opcional)" value="@Model.URLFotoPerfil">
+                                <span asp-validation-for="URLFotoPerfil" class="text-danger"></span>
+                            </div>
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+                            </div>
+                        </form>
+
+                        <div class="text-center mt-4">
+                            <a href="/Login/Login">¿Ya tienes una cuenta? Inicia sesión aquí.</a> <!-- Cambié la ruta a la correcta -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

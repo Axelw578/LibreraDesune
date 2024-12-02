@@ -1,0 +1,134 @@
+﻿/* Fondo con gradiente */
+body {
+    background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Contenedor del login */
+.login-container {
+    max-width: 2000px; /* Ampliamos el ancho para pantallas más grandes */
+    width: 100%; /* Responsividad */
+    padding: 20px;
+}
+
+/* Estilo de la tarjeta del login */
+.login-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 1s ease-in-out;
+}
+
+    /* Título del login */
+    .login-card h3 {
+        color: #000DFF;
+        font-weight: bold;
+    }
+
+    /* Campos de entrada */
+    .login-card .form-control {
+        border-radius: 25px;
+        padding: 12px; /* Espaciado adicional para mayor visibilidad */
+    }
+
+    /* Botón de enviar */
+    .login-card .btn-primary {
+        border-radius: 25px;
+        background-color: #000DFF;
+        border-color: #000DFF;
+        transition: background-color 0.3s ease;
+        padding: 12px;
+        font-size: 16px; /* Tamaño más grande para pantallas de escritorio */
+    }
+
+        /* Hover del botón */
+        .login-card .btn-primary:hover {
+            background-color: #6B73FF;
+        }
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animación de error */
+#loginError {
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(-10px);
+    }
+
+    25% {
+        transform: translateX(10px);
+    }
+
+    50% {
+        transform: translateX(-10px);
+    }
+
+    75% {
+        transform: translateX(10px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* Mejora del espaciado general */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Centrado y estilo del enlace de "olvidaste tu contraseña" */
+.text-center a {
+    color: #000DFF;
+    text-decoration: none;
+}
+
+    .text-center a:hover {
+        text-decoration: underline;
+    }
+
+/* Ajustes Adicionales" */
+
+.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-10px);
+    }
+
+    50% {
+        transform: translateX(10px);
+    }
+
+    75% {
+        transform: translateX(-10px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}

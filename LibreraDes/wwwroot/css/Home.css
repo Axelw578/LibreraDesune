@@ -1,0 +1,152 @@
+﻿/* Home.css */
+
+/* Contenedor de los productos */
+.product-container {
+    display: flex;
+    flex-wrap: wrap; /* Permitir que las tarjetas se envuelvan */
+    justify-content: space-between; /* Distribuir las tarjetas con separación uniforme */
+    gap: 20px; /* Espaciado entre tarjetas */
+    padding: 20px;
+}
+
+/* Estilos de la tarjeta del producto */
+.product-card {
+    background-color: #ffffff; /* Fondo blanco */
+    border-radius: 10px; /* Esquinas redondeadas */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    width: 210px; /* Ancho de la tarjeta ajustado */
+    overflow: hidden; /* Ocultar cualquier desbordamiento */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transiciones suaves */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribuir el contenido para que las tarjetas sean uniformes */
+    height: 90%; /* Asegurar que todas tengan la misma altura */
+    margin: 20px 10px; /* Mayor margen superior e inferior */
+}
+
+    /* Animación al pasar el mouse sobre la tarjeta */
+    .product-card:hover {
+        transform: translateY(-5px); /* Elevar la tarjeta al pasar el mouse */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Sombra más intensa */
+    }
+
+/* Contenedor de la imagen del producto */
+.product-image {
+    width: 100%; /* Ancho completo */
+    height: 250px; /* Altura fija para mantener proporción */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Ocultar desbordamiento */
+    margin-top: 15px; /* Mayor separación entre la imagen y el borde superior de la tarjeta */
+}
+
+    /* Imagen del producto */
+    .product-image img {
+        width: auto; /* Mantener proporciones */
+        height: 100%; /* Altura completa del contenedor */
+        object-fit: contain; /* Asegurar que la imagen no se recorte */
+    }
+
+/* Información del producto */
+.product-info {
+    padding: 10px; /* Espaciado interno */
+    flex-grow: 1; /* Permitir que crezca y ocupe el espacio restante */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* Títulos y texto del producto */
+.product-title {
+    font-size: 1.2rem; /* Tamaño del título ajustado */
+    margin: 5px 0; /* Margen entre elementos */
+    min-height: 48px; /* Establecer una altura mínima para el título */
+    overflow: hidden; /* Ocultar desbordamiento */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limitar a 2 líneas */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis; /* Añadir "..." si es necesario */
+    white-space: normal;
+}
+
+.product-price,
+.product-availability {
+    font-size: 1rem; /* Tamaño del texto ajustado */
+    margin: 5px 0; /* Margen compacto entre elementos */
+    line-height: 1.2; /* Compactar la altura de línea */
+}
+
+/* Botón de agregar al carrito */
+.btn {
+    padding: 10px 15px; /* Tamaño del botón */
+    background-color: #007bff; /* Color de fondo del botón */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Suaviza transiciones */
+    align-self: center; /* Centrar el botón dentro del contenedor */
+    margin-top: auto; /* Empuja el botón al final del contenedor */
+    margin-bottom: 10px; /* Espacio desde la parte inferior de la tarjeta */
+}
+
+    /* Efecto de hover en el botón */
+    .btn:hover {
+        background-color: #0056b3; /* Color más oscuro al pasar el mouse */
+        transform: scale(1.05); /* Aumentar ligeramente el tamaño del botón */
+    }
+
+/* Estilo adicional para la disponibilidad */
+.product-availability {
+    color: white; /* Cambiar el color a blanco */
+    animation: fadeIn 1s; /* Animación de aparición */
+}
+
+/* Animación de fadeIn */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Animaciones para los detalles del libro seleccionado */
+#detalleLibro {
+    display: none; /* Oculto por defecto */
+    animation: slideDown 0.5s ease-out forwards; /* Deslizar hacia abajo al aparecer */
+    background-color: #f9f9f9; /* Color de fondo para los detalles del libro */
+    border-radius: 12px; /* Esquinas redondeadas */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombra ligera */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+/* Deslizamiento suave */
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px); /* Aparecer desde arriba */
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0); /* Posición final */
+    }
+}
+
+/* Efecto al pasar el mouse sobre los detalles del libro */
+#detalleLibro:hover {
+    transform: translateY(-3px); /* Elevar ligeramente al hacer hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25); /* Incrementar sombra al hacer hover */
+    background-color: #ffffff; /* Cambiar color de fondo al hacer hover */
+}
+
+/* Efecto al alejar el cursor de los detalles del libro */
+#detalleLibro:not(:hover) {
+    transform: translateY(0); /* Regresar a la posición original */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Regresar la sombra a su valor original */
+    background-color: #f9f9f9; /* Regresar el color de fondo original */
+}
